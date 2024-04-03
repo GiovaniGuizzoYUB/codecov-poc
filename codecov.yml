@@ -23,15 +23,15 @@ coverage:
         if_ci_failed: error
 
 component_management:
-  default_rules:  # default rules that will be inherited by all components
+  default_rules:
     statuses:
       - type: project
         target: auto
         branches:
           - "!main"
   individual_components:
-    - component_id: module_util  # this is an identifier that should not be changed
-      name: util  # this is a display name, and can be changed freely
+    - component_id: module_util
+      name: util
       paths:
         - typescript/src/util/**
     - component_id: module_components
