@@ -45,15 +45,5 @@ comment:
   layout: "condensed_header, diff, flags, components, condensed_files, condensed_footer"
   behavior: default
 
-flags:
-  pytest-tests:
-    carryforward: true
-    paths:
-      - python
-  jest-tests:
-    carryforward: true
-    paths:
-      - typescript
-
 github_checks:
   annotations: true
