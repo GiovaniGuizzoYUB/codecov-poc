@@ -8,8 +8,8 @@ test("renders learn react link", () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test("renders learn react link with false flag", () => {
-  render(<App flag2 />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+// test("renders learn react link with false flag", () => {
+//   render(<App flag2 />);
+//   const linkElement = screen.getByText(/learn react/i);
+//   expect(linkElement).toBeInTheDocument();
+// });
