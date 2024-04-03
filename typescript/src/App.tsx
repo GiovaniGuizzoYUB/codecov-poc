@@ -2,11 +2,29 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function App({ flag }: { flag: boolean }) {
-  if (flag) {
-    console.log("This is true");
+function App({
+  flag1 = false,
+  flag2 = false,
+}: {
+  flag1?: boolean;
+  flag2?: boolean;
+}) {
+  if (flag1) {
+    console.log("flag1 is true");
   } else {
-    console.log("This is false");
+    console.log("flag1 is false");
+  }
+
+  if (flag2) {
+    console.log("flag2 is true");
+  } else {
+    console.log("flag2 is false");
+  }
+
+  if (flag2 && flag1) {
+    console.log("flag2 && flag1 is true");
+  } else {
+    console.log("flag2 && flag1 is false");
   }
 
   return (
