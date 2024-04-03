@@ -36,7 +36,7 @@ jobs:
       - name: Run tests and collect coverage
         run: |
           cd python
-          pytest --cov=./
+          coverage run -m pytest
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
