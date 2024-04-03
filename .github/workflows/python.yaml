@@ -1,28 +1,43 @@
 name: Codecov Python
+
 on:
   pull_request:
     paths:
       - "python/**"
+
+env:
+  PYTHON_VERSION: '3.10'
+
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
+
+      - name: Create Virtual Environment
+        run: python -m venv venv
+
+      - name: Activate Virtual Environment
+        run: source venv/bin/activate
+
       - name: Install dependencies
         run: |
           cd python
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run tests and collect coverage
         run: |
           cd python
           pytest --cov=./
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
