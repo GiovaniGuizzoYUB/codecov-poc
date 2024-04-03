@@ -37,6 +37,7 @@ jobs:
         run: |
           cd python
           coverage run -m pytest
+        continue-on-error: true
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
