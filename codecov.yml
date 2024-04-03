@@ -40,6 +40,6 @@ component_management:
         - typescript/src/components/**
 
 comment:
-  layout: "header, diff, files"
+  layout: "header, diff, files, footer"
   behavior: default
   require_changes: false
