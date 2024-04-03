@@ -1,4 +1,4 @@
-name: Workflow for Codecov TypeScript + React
+name: Codecov TypeScript
 on: [pull_request]
 jobs:
   run:
