@@ -40,5 +40,5 @@ component_management:
         - typescript/src/components/**
 
 comment:
-  layout: "header, diff, flags, components, files, footer"
+  layout: "condensed_header, condensed_diff, condensed_flags, condensed_components, condensed_files, condensed_footer"
   behavior: default
