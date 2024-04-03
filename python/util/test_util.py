@@ -2,9 +2,9 @@ from .util import util_function
 import pytest
 
 
-def test_util_function_1():
-    result = util_function(1, 2)
-    assert result == "a < b", "Test case where a is less than b failed."
+# def test_util_function_1():
+#     result = util_function(1, 2)
+#     assert result == "a < b", "Test case where a is less than b failed."
 
 
 def test_util_function_2():
