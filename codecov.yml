@@ -22,7 +22,24 @@ coverage:
         if_not_found: success
         if_ci_failed: error
 
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+        branches:
+          - "!main"
+  individual_components:
+    - component_id: module_util
+      name: util
+      paths:
+        - typescript/src/util/**
+    - component_id: module_components
+      name: components
+      paths:
+        - typescript/src/components/**
+
 comment:
-  layout: "header, diff, files"
+  layout: "header, diff, components, files, footer"
   behavior: default
   require_changes: false

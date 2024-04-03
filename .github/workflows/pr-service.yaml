@@ -1,4 +1,4 @@
-name: Workflow for Codecov TypeScript + React
+name: Codecov TypeScript
 on: [pull_request]
 jobs:
   run:
@@ -27,7 +27,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
-          flags: jest-tests # Customize this value according to your test suite
+          flags: jest-tests
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
