@@ -1,0 +1,28 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+  status:
+    project: # Overall project coverage
+      default: # Default context
+        target: auto
+        threshold: 1%
+        if_not_found: success
+        if_ci_failed: error
+
+    patch: # Coverage in the patch
+      default:
+        target: auto
+        threshold: 1%
+        if_not_found: success
+        if_ci_failed: error
+
+comment:
+  layout: "header, diff, files"
+  behavior: default
+  require_changes: false
