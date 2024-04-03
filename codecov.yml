@@ -1,6 +1,6 @@
 codecov:
   notify:
-    require_ci_to_pass: yes
+    require_ci_to_pass: false
 
 coverage:
   precision: 2
@@ -40,6 +40,18 @@ component_management:
         - typescript/src/components/**
 
 comment:
-  layout: "header, diff, flags, components, files, footer"
+  layout: "condensed_header, diff, flags, components, condensed_files, condensed_footer"
   behavior: default
-  require_changes: false
+
+flags:
+  pytest-tests:
+    carryforward: true
+    paths:
+      - python
+  jest-tests:
+    carryforward: true
+    paths:
+      - typescript
+
+github_checks:
+  annotations: true
