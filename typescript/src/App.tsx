@@ -2,7 +2,13 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function App() {
+function App({ flag }: { flag: boolean }) {
+  if (flag) {
+    console.log("This is true");
+  } else {
+    console.log("This is false");
+  }
+
   return (
     <div className="App">
       <header className="App-header">
