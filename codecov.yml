@@ -47,3 +47,13 @@ comment:
 
 github_checks:
   annotations: true
+
+flags:
+  go-tests:
+    carryforward: true
+  jest-tests:
+    carryforward: true
+  cypress-tests:
+    carryforward: true
+  pytest-tests:
+    carryforward: true
