@@ -14,3 +14,8 @@ test("test util function 3", () => {
   const result = testUtilFunction(1, 1);
   expect(result).toBe("a === b");
 });
+
+test("test util function 4", () => {
+  const result = testUtilFunction(5, 5);
+  expect(result).toBe("a + b == 10");
+});

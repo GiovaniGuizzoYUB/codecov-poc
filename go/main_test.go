@@ -28,3 +28,11 @@ func TestCompareNumbersEqual(t *testing.T) {
 		t.Errorf("compareNumbers(1, 1) = %q, want %q", result, expected)
 	}
 }
+
+func TestCompareNumbers5(t *testing.T) {
+	result := compareNumbers(5, 5)
+	expected := "a + b == 10"
+	if result != expected {
+		t.Errorf("compareNumbers(5, 5) = %q, want %q", result, expected)
+	}
+}
