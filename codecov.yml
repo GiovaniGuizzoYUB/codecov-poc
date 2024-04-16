@@ -5,12 +5,12 @@ codecov:
 coverage:
   precision: 2
   round: down
-  range: "70...100"
+  range: "60...100"
 
   status:
     project: # Overall project coverage
       default: # Default context
-        target: auto
+        target: 60
         threshold: 1%
         if_not_found: success
         if_ci_failed: error
@@ -18,7 +18,7 @@ coverage:
 
     patch: # Coverage in the patch
       default:
-        target: auto
+        target: 90
         threshold: 1%
         if_not_found: success
         if_ci_failed: error
