@@ -36,12 +36,10 @@ component_management:
       name: util
       paths:
         - typescript/src/util/**
-      informational: true
     - component_id: module_components
       name: components
       paths:
         - typescript/src/components/**
-      informational: true
 
 comment:
   layout: "condensed_header, diff, flags, components, condensed_files, condensed_footer"

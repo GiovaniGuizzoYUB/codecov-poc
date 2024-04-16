@@ -35,6 +35,10 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Clean coverage dir
+        run: rm -rf coverage
+        working-directory: typescript
+
       - name: Start Application
         run: npm run start &
         working-directory: typescript
