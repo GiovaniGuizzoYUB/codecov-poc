@@ -1,0 +1,41 @@
+name: Codecov Go
+
+on:
+  pull_request:
+    paths:
+      - "go/**"
+
+env:
+  GO_VERSION: '1.22'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd go
+          go mod download
+
+      - name: Run tests and collect coverage
+        run: |
+          cd go
+          go test -v -coverprofile=coverage.out ./...
+        continue-on-error: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: go/coverage.out
+          flags: go-tests
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
