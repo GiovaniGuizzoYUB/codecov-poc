@@ -6,8 +6,6 @@ on:
 jobs:
   setup-build:
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-keys.outputs.key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,15 +15,17 @@ jobs:
         with:
           # Disable running of tests within install job
           runTests: false
-          install-command: yarn install
+          install: yarn install
           build: yarn build
+          working-directory: typescript # Specify the directory containing yarn.lock
+
 
       - name: Save build folder
         uses: actions/upload-artifact@v4
         with:
           name: build
           if-no-files-found: error
-          path: build
+          path: typescript/build
 
   jest-tests:
     needs: setup-build
@@ -38,7 +38,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: build
+          path: typescript/build
 
       - name: Run Jest tests and collect coverage
         run: |
@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: build
+          path: typescript/build
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
