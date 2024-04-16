@@ -15,9 +15,9 @@ jobs:
         with:
           # Disable running of tests within install job
           runTests: false
-          install: yarn install
-          build: yarn build
-          working-directory: typescript # Specify the directory containing yarn.lock
+          install: npm install
+          build: npm run build
+          working-directory: typescript # Specify the directory containing package-lock.json
 
       - name: Save build folder
         uses: actions/upload-artifact@v4
@@ -55,7 +55,8 @@ jobs:
       - name: Run Jest tests and collect coverage
         run: |
           cd typescript
-          yarn test --coverage
+          npm run test -- --coverage
+        working-directory: typescript
 
       - name: Upload Jest coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -87,9 +88,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          start: yarn start
+          start: npm run start
           browser: chrome
-          working-directory: typescript # Specify the directory containing yarn.lock
+          working-directory: typescript # Specify the directory containing package-lock.json
 
       - name: Upload Cypress coverage to Codecov
         uses: codecov/codecov-action@v4
