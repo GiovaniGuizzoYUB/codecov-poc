@@ -6,7 +6,7 @@ on:
       - "go/**"
 
 env:
-  GO_VERSION: '1.22.2'
+  GO_VERSION: '1.18'
 
 jobs:
   run:
@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.GO_VERSION }}
-          cache: 'go'
 
       - name: Install dependencies
         run: |
