@@ -1,0 +1,14 @@
+{
+    "include": [
+        "src/components"
+    ],
+    "reporter": [
+        "lcov",
+        "text"
+    ],
+    "extension": [
+        ".ts",
+        ".tsx"
+    ],
+    "all": true
+}

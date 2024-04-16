@@ -4,33 +4,55 @@ on:
     paths:
       - "typescript/**"
 jobs:
-  run:
+  test-and-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: typescript/package-lock.json
+
       - name: Install dependencies
-        run: |
-          cd typescript
-          npm install
+        run: npm install
+        working-directory: typescript
+
       - name: Build Application
-        run: |
-          cd typescript
-          npm run build
-      - name: Run tests and collect coverage
-        run: |
-          cd typescript
-          npm run test -- --coverage
-      - name: Upload coverage to Codecov
+        run: npm run build
+        working-directory: typescript
+
+      - name: Run Jest tests and collect coverage
+        run: npm run test -- --coverage
+        working-directory: typescript
+
+      - name: Upload Jest coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           flags: jest-tests
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Clean coverage dir
+        run: rm -rf coverage
+        working-directory: typescript
+
+      - name: Start Application
+        run: npm run start &
+        working-directory: typescript
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          working-directory: typescript
+
+      - name: Upload Cypress coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: cypress-tests
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
