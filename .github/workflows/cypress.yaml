@@ -1,0 +1,42 @@
+name: Cypress Tests for TypeScript
+on:
+  pull_request:
+    paths:
+      - "typescript/**"
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: typescript
+
+      - name: Build Application
+        run: npm run build
+        working-directory: typescript
+
+      - name: Start Application
+        run: npm run start &
+        working-directory: typescript
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          working-directory: typescript
+
+      - name: Upload Cypress coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: cypress-tests
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

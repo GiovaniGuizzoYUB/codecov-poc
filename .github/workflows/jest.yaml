@@ -1,10 +1,10 @@
-name: Codecov TypeScript
+name: Jest Tests for TypeScript
 on:
   pull_request:
     paths:
       - "typescript/**"
 jobs:
-  test-and-upload:
+  jest-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,28 +31,6 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           flags: jest-tests
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Clean coverage dir
-        run: rm -rf coverage
-        working-directory: typescript
-
-      - name: Start Application
-        run: npm run start &
-        working-directory: typescript
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          working-directory: typescript
-
-      - name: Upload Cypress coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          flags: cypress-tests
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
