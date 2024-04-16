@@ -19,13 +19,19 @@ jobs:
           build: yarn build
           working-directory: typescript # Specify the directory containing yarn.lock
 
-
       - name: Save build folder
         uses: actions/upload-artifact@v4
         with:
           name: build
           if-no-files-found: error
           path: typescript/build
+
+      - name: Save node_modules folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: node_modules
+          if-no-files-found: error
+          path: typescript/node_modules
 
   jest-tests:
     needs: setup-build
@@ -39,6 +45,12 @@ jobs:
         with:
           name: build
           path: typescript/build
+      
+      - name: Download the node_modules folder
+        uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: typescript/node_modules
 
       - name: Run Jest tests and collect coverage
         run: |
@@ -66,11 +78,18 @@ jobs:
           name: build
           path: typescript/build
 
+      - name: Download the node_modules folder
+        uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: typescript/node_modules
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
           browser: chrome
+          working-directory: typescript # Specify the directory containing yarn.lock
 
       - name: Upload Cypress coverage to Codecov
         uses: codecov/codecov-action@v4
