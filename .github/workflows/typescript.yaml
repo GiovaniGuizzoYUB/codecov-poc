@@ -4,58 +4,27 @@ on:
     paths:
       - "typescript/**"
 jobs:
-  setup-build:
+  test-and-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          # Disable running of tests within install job
-          runTests: false
-          install: npm install
-          build: npm run build
-          working-directory: typescript # Specify the directory containing package-lock.json
+          node-version: '16'
 
-      - name: Save build folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          if-no-files-found: error
-          path: typescript/build
+      - name: Install dependencies
+        run: npm install
+        working-directory: typescript
 
-      - name: Save node_modules folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: node_modules
-          if-no-files-found: error
-          path: typescript/node_modules
-
-  jest-tests:
-    needs: setup-build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download the build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: typescript/build
-      
-      - name: Download the node_modules folder
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: typescript/node_modules
+      - name: Build Application
+        run: npm run build
+        working-directory: typescript
 
       - name: Run Jest tests and collect coverage
-        run: |
-          cd typescript
-          npm run test -- --coverage
+        run: npm run test -- --coverage
         working-directory: typescript
 
       - name: Upload Jest coverage to Codecov
@@ -66,31 +35,15 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  cypress-tests:
-    needs: setup-build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download the build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: typescript/build
-
-      - name: Download the node_modules folder
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: typescript/node_modules
+      - name: Start Application
+        run: npm run start &
+        working-directory: typescript
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          start: npm run start
           browser: chrome
-          working-directory: typescript # Specify the directory containing package-lock.json
+          working-directory: typescript
 
       - name: Upload Cypress coverage to Codecov
         uses: codecov/codecov-action@v4
