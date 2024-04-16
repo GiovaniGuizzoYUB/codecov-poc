@@ -12,33 +12,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
         with:
-          node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: typescript/yarn.lock
+          # Disable running of tests within install job
+          runTests: false
+          build: yarn build
 
-      - name: Cache yarn modules
-        uses: actions/cache@v3
-        id: cache-keys
-        env:
-          cache-name: cache-node-modules
+      - name: Save build folder
+        uses: actions/upload-artifact@v4
         with:
-          path: typescript/node_modules
-          key: build-${{ hashFiles('typescript/yarn.lock') }}
-          restore-keys: |
-            build-
-
-      - name: Install dependencies
-        run: |
-          cd typescript
-          yarn install
-
-      - name: Build Application
-        run: |
-          cd typescript
-          yarn build
+          name: build
+          if-no-files-found: error
+          path: build
 
   jest-tests:
     needs: setup-build
@@ -47,11 +33,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache yarn modules
-        uses: actions/cache@v3
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
         with:
-          path: typescript/node_modules
-          key: build-${{ hashFiles('typescript/yarn.lock') }}
+          name: build
+          path: build
 
       - name: Run Jest tests and collect coverage
         run: |
@@ -73,16 +59,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache yarn modules
-        uses: actions/cache@v3
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
         with:
-          path: typescript/node_modules
-          key: build-${{ hashFiles('typescript/yarn.lock') }}
+          name: build
+          path: build
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
+          browser: chrome
 
       - name: Upload Cypress coverage to Codecov
         uses: codecov/codecov-action@v4
