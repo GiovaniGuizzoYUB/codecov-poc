@@ -17,7 +17,7 @@ jobs:
         with:
           # Disable running of tests within install job
           runTests: false
-          install: yarn install
+          install-command: yarn install
           build: yarn build
 
       - name: Save build folder
