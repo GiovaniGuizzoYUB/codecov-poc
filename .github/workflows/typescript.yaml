@@ -16,25 +16,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: typescript/package-lock.json
+          cache: 'yarn'
+          cache-dependency-path: typescript/yarn.lock
 
-      - name: Cache node modules
+      - name: Cache yarn modules
         uses: actions/cache@v3
         id: cache-keys
         with:
           path: typescript/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('typescript/package-lock.json') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('typescript/yarn.lock') }}
 
       - name: Install dependencies
         run: |
           cd typescript
-          npm install
+          yarn install
 
       - name: Build Application
         run: |
           cd typescript
-          npm run build
+          yarn build
 
   jest-tests:
     needs: setup-build
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache node modules
+      - name: Cache yarn modules
         uses: actions/cache@v3
         with:
           path: typescript/node_modules
@@ -52,7 +52,7 @@ jobs:
       - name: Run Jest tests and collect coverage
         run: |
           cd typescript
-          npm run test -- --coverage
+          yarn test --coverage
 
       - name: Upload Jest coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -69,16 +69,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache node modules
+      - name: Cache yarn modules
         uses: actions/cache@v3
         with:
           path: typescript/node_modules
           key: ${{ needs.setup-build.outputs.cache-key }}
 
-      - name: Run Cypress tests and collect coverage
-        run: |
-          cd typescript
-          npx cypress run
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: yarn build
+          start: yarn start
 
       - name: Upload Cypress coverage to Codecov
         uses: codecov/codecov-action@v4
