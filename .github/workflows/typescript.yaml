@@ -4,33 +4,86 @@ on:
     paths:
       - "typescript/**"
 jobs:
-  run:
+  setup-build:
     runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-keys.outputs.key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: typescript/package-lock.json
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        id: cache-keys
+        with:
+          path: typescript/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('typescript/package-lock.json') }}
+
       - name: Install dependencies
         run: |
           cd typescript
           npm install
+
       - name: Build Application
         run: |
           cd typescript
           npm run build
-      - name: Run tests and collect coverage
+
+  jest-tests:
+    needs: setup-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: typescript/node_modules
+          key: ${{ needs.setup-build.outputs.cache-key }}
+
+      - name: Run Jest tests and collect coverage
         run: |
           cd typescript
           npm run test -- --coverage
-      - name: Upload coverage to Codecov
+
+      - name: Upload Jest coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           flags: jest-tests
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  cypress-tests:
+    needs: setup-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: typescript/node_modules
+          key: ${{ needs.setup-build.outputs.cache-key }}
+
+      - name: Run Cypress tests and collect coverage
+        run: |
+          cd typescript
+          npx cypress run
+
+      - name: Upload Cypress coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: cypress-tests
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
