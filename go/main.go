@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 // compareNumbers takes two integers, a and b, and returns a string describing their relationship.
 func compareNumbers(a int, b int) string {
 	if a < b {
@@ -15,8 +13,4 @@ func compareNumbers(a int, b int) string {
 	} else {
 		return "a === b"
 	}
-}
-
-func main() {
-	fmt.Println(compareNumbers(3, 2)) // Example usage
 }
