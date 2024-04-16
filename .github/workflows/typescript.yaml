@@ -22,9 +22,15 @@ jobs:
       - name: Cache yarn modules
         uses: actions/cache@v3
         id: cache-keys
+        env:
+          cache-name: cache-node-modules
         with:
           path: typescript/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('typescript/yarn.lock') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('typescript/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: |
@@ -47,7 +53,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: typescript/node_modules
-          key: ${{ needs.setup-build.outputs.cache-key }}
+          key: ${{ needs.setup-build.outputs.cache-keys }}
 
       - name: Run Jest tests and collect coverage
         run: |
@@ -73,12 +79,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: typescript/node_modules
-          key: ${{ needs.setup-build.outputs.cache-key }}
+          key: ${{ needs.setup-build.outputs.cache-keys }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: yarn build
           start: yarn start
 
       - name: Upload Cypress coverage to Codecov
