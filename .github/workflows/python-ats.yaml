@@ -1,0 +1,72 @@
+name: Codecov-ATS
+
+on:
+  push:
+    paths:
+      - "python/**"
+
+env:
+  PYTHON_VERSION: '3.10'
+
+jobs:
+  codecov-ats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Create Virtual Environment
+        run: python -m venv venv
+
+      - name: Activate Virtual Environment
+        run: source venv/bin/activate
+
+      - name: Install Codecov CLI
+        run: |
+          cd python
+          python -m pip install --upgrade pip
+          pip install codecov-cli
+
+      - name: Create commit in codecov
+        run: |
+          cd python
+          codecovcli create-commit -t ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Create commit report in codecov
+        run: |
+          cd python
+          codecovcli create-report -t ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Static Analysis
+        run: |
+          cd python
+          codecovcli static-analysis --token ${{ secrets.CODECOV_STATIC_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          cd python
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Label Analysis
+        run: |
+          cd python
+          BASE_SHA=$(git rev-parse HEAD^)
+          codecovcli label-analysis --token ${{ secrets.CODECOV_STATIC_TOKEN }} --base-sha=$BASE_SHA
+
+      - name: Upload to Codecov
+        run: |
+          cd python
+          codecovcli --codecov-yml-path=../codecov.yml do-upload \
+          -t ${{ secrets.CODECOV_TOKEN }} \
+          --plugin pycoverage \
+          --plugin compress-pycoverage \
+          --flag smart-tests
