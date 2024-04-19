@@ -43,10 +43,8 @@ jobs:
 
       - name: Run tests and collect coverage
         run: |
-          cd python
-          cat ../codecov_ats/tests_to_run.txt
-          cat ../codecov_ats/tests_to_run.txt | xargs pytest --cov
-        continue-on-error: true
+          cat ./codecov_ats/tests_to_run.txt
+          cat ./codecov_ats/tests_to_run.txt | xargs pytest --cov
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4-beta
