@@ -69,4 +69,4 @@ jobs:
           -t ${{ secrets.CODECOV_TOKEN }} \
           --plugin pycoverage \
           --plugin compress-pycoverage \
-          --flag smart-tests
+          --flag pytest-tests
