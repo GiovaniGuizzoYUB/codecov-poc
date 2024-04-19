@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -35,15 +33,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run ATS
-        uses: codecov/codecov-ats@v0
-        env:
-          CODECOV_STATIC_TOKEN: ${{ secrets.CODECOV_STATIC_TOKEN }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Run tests and collect coverage
         run: |
-          cat ./codecov_ats/tests_to_run.txt | xargs pytest --cov python
+          pytest --cov python
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4-beta
