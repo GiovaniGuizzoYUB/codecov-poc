@@ -21,4 +21,4 @@ def triangle_type(a, b, c):
         return "equilateral"
     if a == b or b == c or a == c:
         return "isosceles"
-    return "scalenes"
+    return "scalene"
