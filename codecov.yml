@@ -69,5 +69,3 @@ flags:
     carryforward: true
   cypress-tests:
     carryforward: true
-  pytest-tests:
-    carryforward: true
