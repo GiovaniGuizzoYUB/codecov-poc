@@ -10,11 +10,11 @@ def triangle_type(a, b, c):
     Returns:
     str: Type of triangle: "equilateral", "isosceles", "scalene", or "not a triangle".
     """
-    # Check if it can form a triangle
-    if a + b <= c or a + c <= b or b + c <= a:
-        return "not a triangle"
     # Validate non-zero positive lengths
     if a <= 0 or b <= 0 or c <= 0:
+        return "not a triangle"
+    # Check if it can form a triangle
+    if a + b <= c or a + c <= b or b + c <= a:
         return "not a triangle"
     # Determine the type of triangle
     if a == b == c:
