@@ -48,6 +48,20 @@ comment:
 github_checks:
   annotations: true
 
+flag_management:
+  individual_flags:
+    - name: pytest-tests
+      carryforward: true
+      carryforward_mode: "labels"
+      statuses:
+        - type: "project"
+        - type: "patch"
+
+cli:
+  plugins:
+    pycoverage:
+      report_type: "json"
+
 flags:
   go-tests:
     carryforward: true
