@@ -40,14 +40,12 @@ jobs:
         env:
           CODECOV_STATIC_TOKEN: ${{ secrets.CODECOV_STATIC_TOKEN }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          working-directory: python
 
       - name: Run tests and collect coverage
         run: |
           cd python
-          cat ./codecov_ats/tests_to_run.txt
-          cat ./codecov_ats/tests_to_run.txt | xargs pytest --cov
+          cat ../codecov_ats/tests_to_run.txt
+          cat ../codecov_ats/tests_to_run.txt | xargs pytest --cov
         continue-on-error: true
 
       - name: Upload coverage to Codecov
