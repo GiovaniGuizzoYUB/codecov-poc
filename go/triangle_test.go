@@ -11,26 +11,26 @@ func TestTriangleWithZeroLength(t *testing.T) {
 	}
 }
 
-// func TestTriangleWithNegativeLength(t *testing.T) {
-// 	// Edge case with negative side length
-// 	if triangleType(-1, 1, 1) != "not a triangle" {
-// 		t.Error("Test with negative side length failed")
-// 	}
-// }
+func TestTriangleWithNegativeLength(t *testing.T) {
+	// Edge case with negative side length
+	if triangleType(-1, 1, 1) != "not a triangle" {
+		t.Error("Test with negative side length failed")
+	}
+}
 
-// func TestTriangleWithSidesEqualToBoundary(t *testing.T) {
-// 	// Test where the sum of two sides equals the third
-// 	if triangleType(1, 2, 3) != "not a triangle" {
-// 		t.Error("Test with sides equal to boundary failed")
-// 	}
-// }
+func TestTriangleWithSidesEqualToBoundary(t *testing.T) {
+	// Test where the sum of two sides equals the third
+	if triangleType(1, 2, 3) != "not a triangle" {
+		t.Error("Test with sides equal to boundary failed")
+	}
+}
 
-// func TestTriangleJustBelowBoundary(t *testing.T) {
-// 	// Test just below the boundary where the sum of two smaller sides is less than the third
-// 	if triangleType(1, 2, 2) != "isosceles" {
-// 		t.Error("Test just below boundary failed")
-// 	}
-// }
+func TestTriangleJustBelowBoundary(t *testing.T) {
+	// Test just below the boundary where the sum of two smaller sides is less than the third
+	if triangleType(1, 2, 2) != "isosceles" {
+		t.Error("Test just below boundary failed")
+	}
+}
 
 // func TestTriangleWithLargeNumbers(t *testing.T) {
 // 	// Test with very large side lengths that form a triangle
