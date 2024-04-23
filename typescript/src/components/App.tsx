@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logo from "../logo.svg";
 import "./App.css";
+import { useSearchParams } from "react-router-dom";
 
 function App({
   flag1 = false,
@@ -10,6 +11,15 @@ function App({
   flag2?: boolean;
 }) {
   const [value, setValue] = useState("");
+  const [searchParams] = useSearchParams();
+
+  if (searchParams.has("flag1")) {
+    flag1 = Boolean(searchParams.get("flag1"));
+  }
+
+  if (searchParams.has("flag2")) {
+    flag2 = Boolean(searchParams.get("flag2"));
+  }
 
   if (flag1) {
     console.log("flag1 is true");
