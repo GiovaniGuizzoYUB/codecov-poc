@@ -48,11 +48,6 @@ comment:
 github_checks:
   annotations: true
 
-cli:
-  plugins:
-    pycoverage:
-      report_type: "json"
-
 flags:
   go-tests:
     carryforward: true
