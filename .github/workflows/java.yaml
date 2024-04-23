@@ -1,0 +1,37 @@
+name: JUnit Tests for Java
+
+on:
+  pull_request:
+    paths:
+      - "java/**"
+
+jobs:
+  junit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+        working-directory: java
+
+      - name: Run JUnit tests
+        run: ./gradlew test --no-daemon
+        working-directory: java
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: java-tests
+          verbose: true
+          files: "java/app/build/reports/jacoco/test/jacocoTestReport.xml"
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
