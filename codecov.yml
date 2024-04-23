@@ -48,15 +48,6 @@ comment:
 github_checks:
   annotations: true
 
-flag_management:
-  individual_flags:
-    - name: pytest-tests
-      carryforward: true
-      carryforward_mode: "labels"
-      statuses:
-        - type: "project"
-        - type: "patch"
-
 cli:
   plugins:
     pycoverage:
@@ -70,4 +61,6 @@ flags:
   cypress-tests:
     carryforward: true
   java-tests:
+    carryforward: true
+  pytest-tests:
     carryforward: true
