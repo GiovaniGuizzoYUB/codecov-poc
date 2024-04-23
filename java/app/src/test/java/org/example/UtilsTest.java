@@ -29,6 +29,13 @@ public class UtilsTest {
     public void testUtilFunction4() {
         UtilFunction utilFunction = new UtilFunction();
         String result = utilFunction.utilFunction(5, 5);
-        assertEquals("a + b == 10", result, "Test case where a is equal to b failed.");
+        assertEquals("a + b == 10", result, "Test case where a + b is equal to 10 failed.");
+    }
+
+    @Test
+    public void testUtilFunction5() {
+        UtilFunction utilFunction = new UtilFunction();
+        String result = utilFunction.utilFunction(1, 4);
+        assertEquals("a + b == 5", result, "Test case where a + b is equal to 5 failed.");
     }
 }
