@@ -43,6 +43,10 @@ function App({
     console.log("Secret!");
   }
 
+  if (value === "secret2") {
+    console.log("Secret!");
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -57,6 +61,9 @@ function App({
         />
         {value === "secret" && (
           <p data-testid="secret-text">This is a secret text</p>
+        )}
+        {value === "secret2" && (
+          <p data-testid="secret-text">This is an even more secret text</p>
         )}
         <a
           className="App-link"
