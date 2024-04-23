@@ -15,15 +15,21 @@ public class TriangleTypeTest {
     }
 
     @Test
-    public void testTriangleWithZeroLength() {
+    public void testTriangleWithAZeroLength() {
         // Edge case with zero side length
         assertEquals("not a triangle", triangleType.triangleType(0, 1, 1));
     }
 
     @Test
-    public void testTriangleWithNegativeLength() {
+    public void testTriangleWithBZeroLength() {
         // Edge case with negative side length
-        assertEquals("not a triangle", triangleType.triangleType(-1, 1, 1));
+        assertEquals("not a triangle", triangleType.triangleType(1, 0, 1));
+    }
+
+    @Test
+    public void testTriangleWithCZeroLength() {
+        // Edge case with negative side length
+        assertEquals("not a triangle", triangleType.triangleType(1, 1, 0));
     }
 
     @Test
