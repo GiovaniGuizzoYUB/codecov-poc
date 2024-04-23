@@ -69,3 +69,5 @@ flags:
     carryforward: true
   cypress-tests:
     carryforward: true
+  java-tests:
+    carryforward: true
