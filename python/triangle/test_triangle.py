@@ -49,6 +49,6 @@ def test_triangle_all_sides_equal_minimal():
     ), "Minimal equilateral triangle test failed"
 
 
-# def test_triangle_just_above_boundary():
-#     # Test just above the boundary where the sum of two smaller sides is greater than the third
-#     assert triangle_type(2, 3, 4) == "scalene", "Test just above boundary failed"
+def test_triangle_just_above_boundary():
+    # Test just above the boundary where the sum of two smaller sides is greater than the third
+    assert triangle_type(2, 3, 4) == "scalene", "Test just above boundary failed"
