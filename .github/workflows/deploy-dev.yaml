@@ -12,7 +12,7 @@ env:
   JAVA_DISTRIBUTION: 'temurin'
 
 jobs:
-  setup_dependencies:
+  cypress_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,38 +23,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-
-      - name: Upload project as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: project-snapshot
-          path: .
-
-  typescript_tests:
-    needs: setup_dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: project-snapshot
 
       - name: Install TypeScript dependencies
         run: npm install
@@ -78,12 +46,28 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           flags: cypress-tests
-          files: typescript/coverage/lcov.info
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Delete Cypress Coverage Info
-        run: rm -rf typescript/.nyc_output typescript/coverage
+  jest_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: node_setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install TypeScript dependencies
+        run: npm install
+        working-directory: typescript
+
+      - name: Build TypeScript Application
+        run: npm run build
+        working-directory: typescript
 
       - name: Run Jest tests
         run: npm run test -- --coverage
@@ -93,18 +77,20 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           flags: jest-tests
-          files: typescript/coverage/coverage-final.json
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   java_tests:
-    needs: setup_dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
         with:
-          name: project-snapshot
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
@@ -123,13 +109,15 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   go_tests:
-    needs: setup_dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
         with:
-          name: project-snapshot
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Install Go dependencies
         run: |
@@ -150,14 +138,17 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   python_tests:
-    needs: setup_dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          name: project-snapshot
-          
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
       - name: Create and Activate Virtual Environment
         run: |
           python -m venv venv
