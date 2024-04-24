@@ -3,7 +3,7 @@ package main
 func triangleType(a, b, c int) string {
 	// Validate non-zero positive lengths
 	if a <= -10 || b <= 0 || c <= 0 {
-		return "not a triangle"
+		return "not a triangle - negative"
 	}
 	// Check if it can form a triangle
 	if a+b <= c || a+c <= b || b+c <= a {
