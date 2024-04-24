@@ -1,0 +1,152 @@
+name: Main Branch Merge - Deploy Dev
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup_dependencies:
+    runs-on: ubuntu-latest
+    outputs:
+      node_version: '20'
+      go_version: '1.22'
+      python_version: '3.10'
+      java_version: '21'
+      java_distribution: 'temurin'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: node_setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ outputs.node_version }}
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ outputs.go_version }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ outputs.python_version }}
+          cache: 'pip'
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ outputs.java_version }}
+          distribution: ${{ outputs.java_distribution }}
+
+  typescript_tests:
+    needs: setup_dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install TypeScript dependencies
+        run: npm install
+        working-directory: typescript
+
+      - name: Build TypeScript Application
+        run: npm run build
+        working-directory: typescript
+
+      - name: Start TypeScript Application
+        run: npm run start &
+        working-directory: typescript
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          working-directory: typescript
+
+      - name: Upload Cypress coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: cypress-tests
+          files: typescript/coverage/lcov.info
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Delete Cypress Coverage Info
+        run: rm -rf typescript/.nyc_output typescript/coverage
+
+      - name: Run Jest tests
+        run: npm run test -- --coverage
+        working-directory: typescript
+    
+      - name: Upload Jest coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: jest-tests
+          files: typescript/coverage/coverage-final.json
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  java_tests:
+    needs: setup_dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+        working-directory: java
+
+      - name: Run JUnit tests
+        run: ./gradlew test --no-daemon
+        working-directory: java
+
+      - name: Upload Java code coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: java-tests
+          files: java/app/build/reports/jacoco/test/jacocoTestReport.xml
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  go_tests:
+    needs: setup_dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go dependencies
+        run: |
+          cd go
+          go mod download
+
+      - name: Run Go tests
+        run: |
+          cd go
+          go test -v -coverprofile=coverage.out ./...
+
+      - name: Upload Go coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: go-tests
+          file: go/coverage.out
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  python_tests:
+    needs: setup_dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create and Activate Virtual Environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          cd python
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Python tests
+        run: |
+          coverage run -m pytest
+
+      - name: Upload Python coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          flags: python-tests
+          files: python/.coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
