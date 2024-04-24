@@ -57,5 +57,3 @@ flags:
     carryforward: true
   java-tests:
     carryforward: true
-  pytest-tests:
-    carryforward: true
