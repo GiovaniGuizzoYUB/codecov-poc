@@ -159,6 +159,7 @@ jobs:
 
       - name: Run Python tests
         run: |
+          cd python
           coverage run -m pytest
 
       - name: Upload Python coverage to Codecov
