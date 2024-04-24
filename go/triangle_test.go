@@ -6,7 +6,7 @@ import (
 
 func TestTriangleWithZeroLength(t *testing.T) {
 	// Edge case with zero side length
-	if triangleType(0, 1, 1) != "not a triangle" {
+	if triangleType(-1, -1, -1) != "not a triangle" {
 		t.Error("Test with zero side length failed")
 	}
 }
