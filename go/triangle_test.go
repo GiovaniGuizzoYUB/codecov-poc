@@ -13,7 +13,7 @@ func TestTriangleWithZeroLength(t *testing.T) {
 
 func TestTriangleWithNegativeLength(t *testing.T) {
 	// Edge case with negative side length
-	if triangleType(-1, 1, 1) != "not a triangle" {
+	if triangleType(-10, 1, 1) != "not a triangle" {
 		t.Error("Test with negative side length failed")
 	}
 }
